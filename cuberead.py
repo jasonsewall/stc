@@ -35,16 +35,17 @@ class MyHTMLParser(HTMLParser):
     def handle_data(self, data):
         pass
 
-vintage = "/cygdrive/c/Users/Jason Sewall/Downloads/mtgo_vintage_cube_winter_20162017.txt"
+vintage = "mtgo_vintage_cube_winter_20162017.txt"
+vintage2 = "mtgo_vintage_cube_winter_201718.txt"
 
 if __name__ == '__main__':
     # instantiate the parser and fed it some HTML
     parser = MyHTMLParser()
-    fi = ["file:///cygdrive/c/Users/Jason Sewall/Documents/mtgcube/proxies.htm",
-          "file:///cygdrive/c/Users/Jason Sewall/Documents/mtgcube/proxies2.htm",
-          "file:///cygdrive/c/Users/Jason Sewall/Documents/mtgcube/soi.htm",
-          "file:///cygdrive/c/Users/Jason Sewall/Documents/mtgcube/enm-consp2-kld.htm",
-          "file:///cygdrive/c/Users/Jason Sewall/Documents/mtgcube/commander.htm"]
+    fi = ["proxies.htm",
+          "proxies2.htm",
+          "soi.htm",
+          "enm-consp2-kld.htm",
+          "commander.htm"]
     for f in fi:
         connection = urllib.urlopen(f)
         encoding = connection.headers.getparam('charset')
@@ -54,13 +55,19 @@ if __name__ == '__main__':
     with open(vintage, "r") as f:
         vint = set(unicode(li.strip()) for li in f.readlines())
 
+    with open(vintage2, "r") as f:
+        vint2 = set(unicode(li.strip()) for li in f.readlines())
+
     cube = set(cards.iterkeys())
 
     # print vint
     # print cube
-    diff = vint - cube
+    diff = vint2 - vint
     for v in sorted(diff):
-        print v
+        print "+", v
+    diff = vint - vint2
+    for v in sorted(diff):
+        print "-", v
 
     # conn =sqlite3.connect("cube.db")
     # c = conn.cursor()
